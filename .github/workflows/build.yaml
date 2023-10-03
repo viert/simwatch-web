@@ -14,6 +14,15 @@ jobs:
         run: |
           sudo /usr/bin/apt update && sudo /usr/bin/apt install -y docker
       - uses: actions/checkout@v3
+      - name: Create env
+        env:
+          MAPTILER_KEY: ${{ secrets.MAPTILER_KEY }}
+          MAPTILER_STYLE: ${{ secrets.MAPTILER_STYLE }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+        run: |
+          echo "MAPTILER_KEY=${MAPTILER_KEY}" >> .env
+          echo "MAPTILER_STYLE=${MAPTILER_STYLE}" >> .env
+          echo "MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" >> .env
       - name: Docker build
         env:
           DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}

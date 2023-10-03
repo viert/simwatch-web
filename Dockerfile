@@ -5,6 +5,7 @@ ADD package.json /opt/package.json
 ADD rollup.config.js /opt/rollup.config.js
 ADD tsconfig.json /opt/tsconfig.json
 ADD yarn.lock /opt/yarn.lock
+ADD .env /opt/.env
 WORKDIR /opt
 RUN yarn && yarn build
 
