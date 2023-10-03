@@ -1,0 +1,28 @@
+name: Docker Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install build dependencies
+        run: |
+          sudo /usr/bin/apt update && sudo /usr/bin/apt install -y docker
+      - uses: actions/checkout@v3
+      - name: Docker build
+        env:
+          DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_IMAGE_VERSION: "1.0.0"
+        run: |
+          docker build -t $DOCKER_IMAGE:$DOCKER_IMAGE_VERSION .
+          docker tag $DOCKER_IMAGE:$DOCKER_IMAGE_VERSION $DOCKER_IMAGE:latest
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push $DOCKER_IMAGE:$DOCKER_IMAGE_VERSION
+          docker push $DOCKER_IMAGE:latest
