@@ -183,25 +183,32 @@ class APIConnect {
       return;
     }
 
-    if (msgData.update_type === "SET") {
-      if (msgData.pilot) {
-        this.emit("set-pilots", [msgData.pilot]);
+    if (msgData.pilot_update) {
+      switch (msgData.pilot_update.update_type) {
+        case "SET":
+          this.emit("set-pilots", msgData.pilot_update.pilots);
+          break;
+        case "DELETE":
+          this.emit("del-pilots", msgData.pilot_update.pilots);
+          break;
       }
-      if (msgData.airport) {
-        this.emit("set-airports", [msgData.airport]);
+    } else if (msgData.airport_update) {
+      switch (msgData.airport_update.update_type) {
+        case "SET":
+          this.emit("set-airports", msgData.airport_update.airports);
+          break;
+        case "DELETE":
+          this.emit("del-airports", msgData.airport_update.airports);
+          break;
       }
-      if (msgData.fir) {
-        this.emit("set-firs", [msgData.fir]);
-      }
-    } else if (msgData.update_type === "DELETE") {
-      if (msgData.pilot) {
-        this.emit("del-pilots", [msgData.pilot]);
-      }
-      if (msgData.airport) {
-        this.emit("del-airports", [msgData.airport]);
-      }
-      if (msgData.fir) {
-        this.emit("del-firs", [msgData.fir]);
+    } else if (msgData.fir_update) {
+      switch (msgData.fir_update.update_type) {
+        case "SET":
+          this.emit("set-firs", msgData.fir_update.firs);
+          break;
+        case "DELETE":
+          this.emit("del-firs", msgData.fir_update.firs);
+          break;
       }
     }
   }
