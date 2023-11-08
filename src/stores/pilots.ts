@@ -50,8 +50,6 @@ export const pilots = readable<{ [key: string]: Pilot }>(
     let pilots: { [key: string]: Pilot } = {};
 
     const add = (objects: Pilot[]) => {
-      console.log(objects);
-
       pilots = {
         ...pilots,
         ...objects.reduce<{ [key: string]: Pilot }>((acc, item) => {
@@ -68,7 +66,6 @@ export const pilots = readable<{ [key: string]: Pilot }>(
     };
 
     const remove = (objects: Pilot[]) => {
-      console.log(objects);
       objects.forEach(pilot => {
         delete pilots[pilot.callsign];
       });

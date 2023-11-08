@@ -82,8 +82,10 @@ export const ilsPoly = (
   heading: number,
   length = ILS_POLY_LENGTH_MI
 ) => {
+  console.log(`ILS start ${start}`);
   const startPoint = point(start);
   const rev = (heading + 180) % 360;
+  console.log(`ILS rev angle ${rev}`);
 
   const dirs = [
     [rev - ILS_POLY_SPREAD_DEG, length],
@@ -100,6 +102,7 @@ export const ilsPoly = (
     startPoint,
   ];
 
+  console.log(`ILS points ${points}`);
   return {
     type: "Feature",
     geometry: {
