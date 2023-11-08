@@ -2,8 +2,15 @@ import circle from "@turf/circle";
 import { derived, Readable, readable, Subscriber } from "svelte/store";
 import { api } from "../apiconnect";
 import { departureArrows, ilsPoly } from "../maplib";
-import type { Airport } from "../types";
+import type { Airport, Runway } from "../types";
 import { processWeather } from "../weather";
+
+function checkRunwayIsValid(runway: Partial<Runway>) {
+  if (runway.heading === undefined) return false;
+  if (runway.latitude === undefined) return false;
+  if (runway.longitude === undefined) return false;
+  return true;
+}
 
 export const setWeather = (value: boolean) => {
   api.setWeather(value);
@@ -83,7 +90,7 @@ export const arrivalGeoJSON = derived<
     const { runways } = airport;
     for (const ident in runways) {
       const runway = runways[ident];
-      if (runway.active_lnd) {
+      if (runway.active_lnd && checkRunwayIsValid(runway)) {
         const feature: GeoJSON.Feature = ilsPoly(
           [runway.longitude, runway.latitude],
           runway.heading
@@ -112,7 +119,7 @@ export const departureGeoJSON = derived<
     const { runways } = airport;
     for (const ident in runways) {
       const runway = runways[ident];
-      if (runway.active_to) {
+      if (runway.active_to && checkRunwayIsValid(runway)) {
         const features: GeoJSON.Feature[] = departureArrows(
           [runway.longitude, runway.latitude],
           runway.heading,
